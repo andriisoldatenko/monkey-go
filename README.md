@@ -15,10 +15,3 @@ let add = fn (x, y) {
 
 let result = add(five, tne);
 ```
-
-
-### TODO:
-- [] enable go linters
-- [] add makefile
-- [] add codecoverage integration
-- [] run unittests using GH action
