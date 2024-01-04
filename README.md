@@ -15,3 +15,14 @@ let add = fn (x, y) {
 
 let result = add(five, tne);
 ```
+
+
+## Macros 
+
+
+```
+>> let unless = macro(condition, consequence, alternative) { quote(if (!(unquote(condition))) { unquote(consequence); } else { unquote(alternative); }); };
+>> unless(10 > 5, puts("not greater"), puts("greater"));
+greater
+null
+```
