@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/andriisoldatenko/monkey-go/compiler"
 	"github.com/andriisoldatenko/monkey-go/lexer"
+	"github.com/andriisoldatenko/monkey-go/object"
 	"github.com/andriisoldatenko/monkey-go/parser"
 	"github.com/andriisoldatenko/monkey-go/vm"
 	"io"
@@ -12,6 +13,10 @@ import (
 
 func StartComp(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	constants := []object.Object{}
+	globals := make([]object.Object, vm.GlobalSize)
+	symbolTable := compiler.NewSymbolTable()
+
 	for {
 		fmt.Fprintf(out, PROMPT)
 		scanned := scanner.Scan()
@@ -31,7 +36,7 @@ func StartComp(in io.Reader, out io.Writer) {
 			printParserErrors(out, p.Errors())
 			continue
 		}
-		comp := compiler.New()
+		comp := compiler.NewWithState(symbolTable, constants)
 
 		err := comp.Compile(program)
 
@@ -40,7 +45,9 @@ func StartComp(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		machine := vm.New(comp.Bytecode())
+		code := comp.Bytecode()
+		constants = code.Constants
+		machine := vm.NewWithGlobalsStore(code, globals)
 
 		err = machine.Run()
 
