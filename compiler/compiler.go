@@ -5,6 +5,7 @@ import (
 	"github.com/andriisoldatenko/monkey-go/ast"
 	"github.com/andriisoldatenko/monkey-go/code"
 	"github.com/andriisoldatenko/monkey-go/object"
+	"sort"
 )
 
 type EmittedInstruction struct {
@@ -188,6 +189,28 @@ func (c *Compiler) Compile(node ast.Node) error {
 		}
 		c.emit(code.OpArray, len(node.Elements))
 
+	case *ast.HashLiteral:
+		keys := []ast.Expression{}
+		for k := range node.Pairs {
+			keys = append(keys, k)
+		}
+		sort.Slice(keys, func(i, j int) bool {
+			return keys[i].String() < keys[j].String()
+		})
+
+		for _, k := range keys {
+			err := c.Compile(k)
+			if err != nil {
+				return err
+			}
+
+			err = c.Compile(node.Pairs[k])
+			if err != nil {
+				return err
+			}
+
+		}
+		c.emit(code.OpHash, len(node.Pairs)*2)
 	}
 	return nil
 
