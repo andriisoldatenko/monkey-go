@@ -14,7 +14,7 @@ import (
 func StartComp(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 	constants := []object.Object{}
-	globals := make([]object.Object, vm.GlobalSize)
+	globals := make([]object.Object, vm.GlobalsSize)
 	symbolTable := compiler.NewSymbolTable()
 
 	for {
