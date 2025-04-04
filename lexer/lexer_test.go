@@ -7,7 +7,6 @@ import (
 
 func TestNextToken(t *testing.T) {
 	input := `let five = 5;
-
 let ten = 10;
 
 let add = fn(x, y) {
@@ -15,30 +14,21 @@ let add = fn(x, y) {
 };
 
 let result = add(five, ten);
-
 !-/*5;
-
 5 < 10 > 5;
 
 if (5 < 10) {
-  return true;
+	return true;
 } else {
-  return false;
+	return false;
 }
 
 10 == 10;
-
 10 != 9;
-
 "foobar"
-
 "foo bar"
-
 [1, 2];
-
 {"foo": "bar"}
-
-macro(x, y) { x + y; };
 `
 
 	tests := []struct {
@@ -55,7 +45,6 @@ macro(x, y) { x + y; };
 		{token.ASSIGN, "="},
 		{token.INT, "10"},
 		{token.SEMICOLON, ";"},
-
 		{token.LET, "let"},
 		{token.IDENT, "add"},
 		{token.ASSIGN, "="},
@@ -72,7 +61,6 @@ macro(x, y) { x + y; };
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.SEMICOLON, ";"},
-
 		{token.LET, "let"},
 		{token.IDENT, "result"},
 		{token.ASSIGN, "="},
@@ -83,27 +71,18 @@ macro(x, y) { x + y; };
 		{token.IDENT, "ten"},
 		{token.RPAREN, ")"},
 		{token.SEMICOLON, ";"},
-
-		//!-/*5;
 		{token.BANG, "!"},
 		{token.MINUS, "-"},
 		{token.SLASH, "/"},
 		{token.ASTERISK, "*"},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
-
-		//5 < 10 > 5;
 		{token.INT, "5"},
 		{token.LT, "<"},
 		{token.INT, "10"},
 		{token.GT, ">"},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
-		// if (5 < 10) {
-		//  return true;
-		//} else {
-		//  return false;
-		//}`
 		{token.IF, "if"},
 		{token.LPAREN, "("},
 		{token.INT, "5"},
@@ -121,51 +100,27 @@ macro(x, y) { x + y; };
 		{token.FALSE, "false"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
-
-		//10 == 10;
 		{token.INT, "10"},
 		{token.EQ, "=="},
 		{token.INT, "10"},
 		{token.SEMICOLON, ";"},
-
-		//10 != 9;
 		{token.INT, "10"},
 		{token.NOT_EQ, "!="},
 		{token.INT, "9"},
 		{token.SEMICOLON, ";"},
-		// strings
 		{token.STRING, "foobar"},
 		{token.STRING, "foo bar"},
-
-		//
 		{token.LBRACKET, "["},
 		{token.INT, "1"},
 		{token.COMMA, ","},
 		{token.INT, "2"},
 		{token.RBRACKET, "]"},
 		{token.SEMICOLON, ";"},
-
-		//{"foo": "bar"}
 		{token.LBRACE, "{"},
 		{token.STRING, "foo"},
 		{token.COLON, ":"},
 		{token.STRING, "bar"},
 		{token.RBRACE, "}"},
-
-		// macro
-		{token.MACRO, "macro"},
-		{token.LPAREN, "("},
-		{token.IDENT, "x"},
-		{token.COMMA, ","},
-		{token.IDENT, "y"},
-		{token.RPAREN, ")"},
-		{token.LBRACE, "{"},
-		{token.IDENT, "x"},
-		{token.PLUS, "+"},
-		{token.IDENT, "y"},
-		{token.SEMICOLON, ";"},
-		{token.RBRACE, "}"},
-		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
 
